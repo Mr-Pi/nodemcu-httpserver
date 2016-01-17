@@ -109,6 +109,21 @@ return function (port)
             local auth
             local user = "Anonymous"
 
+	    -- as suggest by anyn99 (https://github.com/marcoskirsch/nodemcu-httpserver/issues/36#issuecomment-167442461)
+	    -- collect data packets until the size of http body meets the Content-Length stated in header
+	    if payload:find("Content%-Length:") or bBodyMissing then
+		    if tmp_payload then tmp_payload = tmp_payload .. payload else tmp_payload = payload end
+		    if (tonumber(string.match(tmp_payload, "%d+", tmp_payload:find("Content%-Length:")+16)) > #tmp_payload:sub(tmp_payload:find("\r\n\r\n", 1, true)+4, #tmp_payload)) then
+			    bBodyMissing = true
+			    return
+		    else
+			    print("HTTP packet assembled! size: "..#tmp_payload)
+			    payload = tmp_payload
+			    tmp_payload, bBodyMissing = nil    
+		    end
+	    end
+	    collectgarbage()
+
             -- parse payload and decide what to serve.
             local req = dofile("httpserver-request.lc")(payload)
             print("Requested URI: " .. req.request)

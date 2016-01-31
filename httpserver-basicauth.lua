@@ -13,7 +13,7 @@ function basicAuth.authenticate(header)
    if not credentials_enc then
       return nil
    end
-   local credentials = dofile("httpserver-b64decode.lc")(credentials_enc)
+   local credentials = base64.dec(credentials_enc)
    local user, pwd = credentials:match("^(.*):(.*)$")
    if user ~= conf.auth.user or pwd ~= conf.auth.password then
       return nil

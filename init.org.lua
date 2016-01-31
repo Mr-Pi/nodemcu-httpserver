@@ -1,11 +1,12 @@
 -- Begin WiFi configuration
 
+dofile("base64_v2.lua")
 local wifiConfig = {}
 
 -- wifi.STATION         -- station: join a WiFi network
 -- wifi.SOFTAP          -- access point: create a WiFi network
 -- wifi.wifi.STATIONAP  -- both station and access point
-wifiConfig.mode = wifi.STATIONAP  -- both station and access point
+wifiConfig.mode = wifi.STATION  -- both station and access point
 
 wifiConfig.accessPointConfig = {}
 wifiConfig.accessPointConfig.ssid = "ESP-"..node.chipid()   -- Name of the SSID you want to create
@@ -17,8 +18,8 @@ wifiConfig.accessPointIpConfig.netmask = "255.255.255.0"
 wifiConfig.accessPointIpConfig.gateway = "192.168.111.1"
 
 wifiConfig.stationPointConfig = {}
-wifiConfig.stationPointConfig.ssid = "Internet"        -- Name of the WiFi network you want to join
-wifiConfig.stationPointConfig.pwd =  ""                -- Password for the WiFi network
+wifiConfig.stationPointConfig.ssid = "wlan"        -- Name of the WiFi network you want to join
+wifiConfig.stationPointConfig.pwd =  "welcome2shack"                -- Password for the WiFi network
 
 -- Tell the chip to connect to the access point
 

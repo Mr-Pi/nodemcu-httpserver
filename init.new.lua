@@ -12,9 +12,12 @@ function errorreturn(errormsg)
 end
 
 for _,filename in pairs(g.luafiles) do
-	print("compile '"..filename.."'")
-	node.compile(filename)
-	file.remove(filename)
+	if file.open(filename) then
+		file.close()
+		print("compile '"..filename.."'")
+		node.compile(filename)
+		file.remove(filename)
+	end
 end
 
 -- configuration
@@ -51,4 +54,5 @@ else
 	g.prefix="http/"
 end
 
+collectgarbage()
 dofile("httpserver.lc")(80)

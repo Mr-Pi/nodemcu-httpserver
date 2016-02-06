@@ -105,7 +105,6 @@ return function (port)
 
          local function onReceive(connection, payload)
             collectgarbage()
-            local conf = dofile("httpserver-conf.lc")
             local auth
             local user = "Anonymous"
 
@@ -127,7 +126,7 @@ return function (port)
             -- parse payload and decide what to serve.
             local req = dofile("httpserver-request.lc")(payload)
             print("Requested URI: " .. req.request)
-            if conf.auth.enabled then
+            if g.config.httpauth.enabled then
                auth = dofile("httpserver-basicauth.lc")
                user = auth.authenticate(payload) -- authenticate returns nil on failed auth
             end

@@ -1,6 +1,6 @@
 -- vim: ts=4 sw=4
 g={
-	luafiles={"httpserver.lua","httpserver-request.lua","httpserver-basicauth.lua","base64_v2.lua","httpserver-conf.lua","httpserver-static.lua","httpserver-header.lua","httpserver-error.lua","wifi.lua"}
+	luafiles={"httpserver.lua","httpserver-request.lua","httpserver-basicauth.lua","base64_v2.lua","httpserver-static.lua","httpserver-header.lua","httpserver-error.lua","wifi.lua"}
 }
 
 -- basic functions

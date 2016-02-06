@@ -5,7 +5,6 @@
 basicAuth = {}
 
 function basicAuth.authenticate(header)
-   conf = dofile("httpserver-conf.lc")
    -- Parse basic auth http header.
    -- Returns the username if header contains valid credentials,
    -- nil otherwise.
@@ -15,7 +14,7 @@ function basicAuth.authenticate(header)
    end
    local credentials = base64.dec(credentials_enc)
    local user, pwd = credentials:match("^(.*):(.*)$")
-   if user ~= conf.auth.user or pwd ~= conf.auth.password then
+   if user ~= g.config.httpauth.user or pwd ~= g.config.httpauth.password then
       return nil
    end
    print("httpserver-basicauth: User \"" .. user .. "\" authenticated.")
@@ -23,7 +22,7 @@ function basicAuth.authenticate(header)
 end
 
 function basicAuth.authErrorHeader()
-   return "WWW-Authenticate: Basic realm=\"" .. conf.auth.realm .. "\""
+   return "WWW-Authenticate: Basic realm=\"" .. tostring(g.config.httpauth.realm) .. "\""
 end
 
 return basicAuth

@@ -174,7 +174,9 @@ return function (port)
    -- false and nil evaluate as false
    local ip = wifi.sta.getip()
    if not ip then ip = wifi.ap.getip() end
-   print("nodemcu-httpserver running at http://" .. ip .. ":" ..  port)
-   return s
+   print("nodemcu-httpserver running at http://" .. tostring(ip) .. ":" ..  tostring(port))
+   ip=nil
+   collectgarbage()
 
+   return s
 end

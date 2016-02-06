@@ -1,4 +1,5 @@
 -- vim: ts=4 sw=4
+require"base64_v2"
 g={
 	luafiles={"httpserver.lua","httpserver-request.lua","httpserver-basicauth.lua","base64_v2.lua","httpserver-static.lua","httpserver-header.lua","httpserver-error.lua","wifi.lua"}
 }
@@ -31,14 +32,6 @@ if not pcall(function() g.config=cjson.decode(file.read()) end) then
 end
 
 -- wifi
-print("*** configure wifi")
-wifi.sta.eventMonReg(wifi.STA_IDLE, function() print("WIFI STATION: IDLE") end)
-wifi.sta.eventMonReg(wifi.STA_CONNECTING, function() print("WIFI STATION: CONNECTING") end)
-wifi.sta.eventMonReg(wifi.STA_WRONGPWD, function() print("WIFI STATION: WRONGPWD") end)
-wifi.sta.eventMonReg(wifi.STA_APNOTFOUND, function() print("WIFI STATION: APNOTFOUND") end)
-wifi.sta.eventMonReg(wifi.STA_FAIL, function() print("WIFI STATION: FAILED") end)
-wifi.sta.eventMonReg(wifi.STA_GOTIP, function() print("WIFI STATION: GOTIP "..tostring(wifi.sta.getip())) end)
-wifi.sta.eventMonStart(250)
 dofile("wifi.lc")
 
 -- httpserver

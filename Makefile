@@ -11,7 +11,7 @@ SPEED=9600
 # End of user config
 ######################################################################
 HTTP_FILES := $(wildcard http/*)
-LUA_FILES := init.org.lua httpserver.lua httpserver-request.lua httpserver-basicauth.lua base64_v2.lua httpserver-conf.lua httpserver-static.lua httpserver-header.lua httpserver-error.lua
+SERVER_FILES := httpserver.lua httpserver-request.lua httpserver-basicauth.lua base64_v2.lua httpserver-conf.lua httpserver-static.lua httpserver-header.lua httpserver-error.lua wifi.lua init.new.lua $(wildcard http-init/*)
 
 # Print usage
 usage:
@@ -30,10 +30,10 @@ upload_http: $(HTTP_FILES)
 	@$(NODEMCU-UPLOADER) -b $(SPEED) -p $(PORT) upload $(foreach f, $^, $(f))
 
 # Upload httpserver lua files (init and server module)
-upload_server: $(LUA_FILES)
+upload_server: $(SERVER_FILES)
 	@$(NODEMCU-UPLOADER) -b $(SPEED) -p $(PORT) upload $(foreach f, $^, $(f))
 
 # Upload all
-upload_all: $(LUA_FILES) $(HTTP_FILES)
+upload_all: $(SERVER_FILES) $(HTTP_FILES)
 	@$(NODEMCU-UPLOADER) -b $(SPEED) -p $(PORT) upload $(foreach f, $^, $(f))
 

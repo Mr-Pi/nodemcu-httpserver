@@ -1,0 +1,1 @@
+{"safemode":true,"wifimode":"STATIONAP","wificlient":{"ssid":"YOURWIFISSID","password":"YOURWIFIPASSWORD","auto":true},"wifiap":{"ssid":"testtest","password":"testtesttest","authentication":"AUTH_OPEN","hidden":false},"httpauth":{"enabled":false,"realm":"","user":"test","password":"test"}}

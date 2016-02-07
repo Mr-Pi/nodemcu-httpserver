@@ -11,7 +11,7 @@ SPEED=9600
 # End of user config
 ######################################################################
 HTTP_FILES := $(wildcard http/*)
-SERVER_FILES := httpserver.lua httpserver-request.lua httpserver-basicauth.lua base64_v2.lua httpserver-static.lua httpserver-header.lua httpserver-error.lua wifi.lua init.new.lua $(wildcard http-init/*)
+SERVER_FILES := httpserver.lua httpserver-request.lua httpserver-basicauth.lua base64_v2.lua httpserver-static.lua httpserver-header.lua httpserver-error.lua wlan.lua init.new.lua $(wildcard http-init/*)
 
 # Print usage
 usage:

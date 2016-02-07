@@ -32,7 +32,10 @@ if not pcall(function() g.config=cjson.decode(file.read()) end) then
 end
 
 -- wifi
-dofile("wifi.lc")
+wificonf=require"wlan"
+wificonf.init()
+wificonf=nil
+collectgarbage()
 
 -- httpserver
 if g.config.safemode then

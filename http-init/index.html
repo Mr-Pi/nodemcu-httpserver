@@ -92,8 +92,10 @@
 						console.debug("invalid configuration:",editor.validate())
 					} else {
 						console.debug(editor.getValue())
+						editor.disable()
 						xmlReqPost.open("POST", "/config.lua", true)
 						xmlReqPost.setRequestHeader("Content-Type","application/json")
+						xmlReqPost.onload=function() {editor.enable()}
 						xmlReqPost.send(JSON.stringify(editor.getValue()))
 					}
 				})

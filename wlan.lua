@@ -1,6 +1,5 @@
 -- vim: ts=4 sw=4
 local wifimap={AUTH_OPEN=0,AUTH_WEP=1,AUTH_WPA_PSK=2,AUTH_WPA2_PSK=3,AUTH_WPA_WPA2_PSK=4}
-local hiddenwifi=0
 local cb={}
 
 function cb.configStation()
@@ -15,12 +14,15 @@ end
 function cb.configAP()
 	print("*** configure wifi AP")
 	if g.config.wifiap.hidden then hiddenwifi=1 end
+	local hiddenwifi=0
 	wifi.ap.config({
 		ssid=g.config.wifiap.ssid,
 		pwd=g.config.wifiap.password,
 		auth=wifimap[g.config.wifiap.authentication],
 		hidden=hiddenwifi
 	})
+	hiddenwifi=nil
+	collectgarbage()
 end
 
 function cb.configMode()

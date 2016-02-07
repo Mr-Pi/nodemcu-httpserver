@@ -37,7 +37,9 @@ return function(connection, req, args)
 		if not file.open("http-init/config.json","w+") then
 			return errorreturn("failed to open configuration file")
 		end
-		file.write(json)
+		if not file.write(json) then
+			return errorreturn("failed to write configuration file")
+		end
 		file.close()
 
 		updateWiFi(config)

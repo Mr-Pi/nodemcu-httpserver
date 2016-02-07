@@ -63,8 +63,6 @@ return function (port)
             local uri = req.uri
             local fileServeFunction = nil
             
-            print("Method: " .. method);
-            
             if #(uri.file) > 32 then
                -- nodemcu-firmware cannot handle long filenames.
                uri.args = {code = 400, errorString = "Bad Request"}
@@ -105,14 +103,28 @@ return function (port)
 
          local function onReceive(connection, payload)
             collectgarbage()
-            local conf = dofile("httpserver-conf.lc")
             local auth
             local user = "Anonymous"
+
+	    -- as suggest by anyn99 (https://github.com/marcoskirsch/nodemcu-httpserver/issues/36#issuecomment-167442461)
+	    -- collect data packets until the size of http body meets the Content-Length stated in header
+	    if payload:find("Content%-Length:") or bBodyMissing then
+		    if tmp_payload then tmp_payload = tmp_payload .. payload else tmp_payload = payload end
+		    if (tonumber(string.match(tmp_payload, "%d+", tmp_payload:find("Content%-Length:")+16)) > #tmp_payload:sub(tmp_payload:find("\r\n\r\n", 1, true)+4, #tmp_payload)) then
+			    bBodyMissing = true
+			    return
+		    else
+			    print("HTTP packet assembled! size: "..#tmp_payload)
+			    payload = tmp_payload
+			    tmp_payload, bBodyMissing = nil    
+		    end
+	    end
+	    collectgarbage()
 
             -- parse payload and decide what to serve.
             local req = dofile("httpserver-request.lc")(payload)
             print("Requested URI: " .. req.request)
-            if conf.auth.enabled then
+            if g.config.httpauth.enabled then
                auth = dofile("httpserver-basicauth.lc")
                user = auth.authenticate(payload) -- authenticate returns nil on failed auth
             end
@@ -159,7 +171,9 @@ return function (port)
    -- false and nil evaluate as false
    local ip = wifi.sta.getip()
    if not ip then ip = wifi.ap.getip() end
-   print("nodemcu-httpserver running at http://" .. ip .. ":" ..  port)
-   return s
+   print("nodemcu-httpserver running at http://" .. tostring(ip) .. ":" ..  tostring(port))
+   ip=nil
+   collectgarbage()
 
+   return s
 end

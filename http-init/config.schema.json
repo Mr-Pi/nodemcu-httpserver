@@ -1,0 +1,93 @@
+{
+	"title": "Configuration",
+	"type": "object",
+	"format": "grid",
+	"properties": {
+		"safemode": {
+			"type": "boolean",
+			"default": true,
+			"readOnly": true
+		},
+		"wifimode": {
+			"title": "WiFi-Mode",
+			"type": "string",
+			"options": {"enum_titles":["Client","AP","Client and AP"]},
+			"enum": ["STATION","SOFTAP","STATIONAP"]
+		},
+		"wificlient": {
+			"title": "WiFi Client",
+			"type": "object",
+			"format": "grid",
+			"options": {"disable_collapse":false},
+			"properties": {
+				"ssid": {
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 32
+				},
+				"password": {
+					"type": "string",
+					"format": "wifipassword",
+					"description": "leave empty to connect to an open network",
+					"maxLength": 64
+				},
+				"auto": {
+					"type": "boolean",
+					"title": "auto connect",
+					"readonly": true,
+					"default": true
+				}
+			}
+		},
+		"wifiap": {
+			"title": "WiFi AP",
+			"type": "object",
+			"options": {"disable_collapse":false},
+			"format": "grid",
+			"properties": {
+				"ssid": {
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 32
+				},
+				"password": {
+					"type": "string",
+					"format": "wifipassword",
+					"maxLength": 64
+				},
+				"authentication": {
+					"type": "string",
+					"enum": ["AUTH_OPEN","AUTH_WEP","AUTH_WPA_PSK","AUTH_WPA2_PSK","AUTH_WPA_WPA2_PSK"],
+					"default": "AUTH_OPEN"
+				},
+				"hidden": {
+					"type": "boolean"
+				}
+			}
+		},
+		"httpauth": {
+			"title": "HTTP basic authentication",
+			"type": "object",
+			"options": {"disable_collapse":false},
+			"format": "grid",
+			"properties": {
+				"enabled": {
+					"type": "boolean"
+				},
+				"realm": {
+					"title": "Welcome message",
+					"type": "string"
+				},
+				"user": {
+					"title": "username",
+					"type": "string",
+					"minLength": 1
+				},
+				"password": {
+					"type": "string",
+					"minLength": 1
+				}
+			}
+		}
+	}
+}

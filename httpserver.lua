@@ -63,8 +63,6 @@ return function (port)
             local uri = req.uri
             local fileServeFunction = nil
             
-            print("Method: " .. method);
-            
             if #(uri.file) > 32 then
                -- nodemcu-firmware cannot handle long filenames.
                uri.args = {code = 400, errorString = "Bad Request"}

@@ -47,7 +47,6 @@ end
 local function getRequestData(payload)
   local requestData
   return function ()
-    print("Getting Request Data")
     if requestData then
       return requestData
     else
@@ -59,13 +58,13 @@ local function getRequestData(payload)
       
       -- print("mimeType = [" .. mimeType .. "]")
       
+      requestData = body
       if mimeType == "application/json" then
-        print("JSON: " .. body)
-        requestData = cjson.decode(body)
+		if not pcall(function() requestData=cjson.decode(body) end) then
+			print("FAILED TO DECODE JSON FROM REQUEST")
+		end
       elseif mimeType == "application/x-www-form-urlencoded" then
         requestData = parseFormData(body)
-      else
-        requestData = {}
       end
       
       return requestData

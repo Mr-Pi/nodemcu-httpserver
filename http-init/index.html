@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- vim: ts=4 sw=4 -->
 <html>
 	<head>
 		<meta charset="utf-8">
@@ -38,6 +39,9 @@
 				</div>
 			</form>
 		</div>
+		<abbr title="Enter expert mode" style="display:block;position:fixed;bottom:0.25em;right:0.25em;">
+			<a href="#expert" onclick="$('[disabled]').prop('disabled',false);" style="color:darkred;">π</a>
+		</abbr>
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
@@ -52,6 +56,7 @@
 			JSONEditor.defaults.options.disable_properties = true
 			JSONEditor.defaults.options.no_additional_properties = true
 			JSONEditor.defaults.options.required_by_default = true
+			JSONEditor.defaults.options.show_errors = "always"
 
 // error checker
 			JSONEditor.defaults.custom_validators.push(function(schema, value, path) {
@@ -81,23 +86,29 @@
 			var xmlReqPost = new XMLHttpRequest();
 			xmlReqGet.open("GET", "/config.json", true)
 			xmlReqGet.setRequestHeader("Content-Type","application/json")
+
+			function submitConfig() {
+				if(editor.validate().length!==0) {
+					console.debug("invalid configuration:",editor.validate())
+				} else {
+					console.debug(editor.getValue())
+					editor.disable()
+					xmlReqPost.open("POST", "/config.lua", true)
+					xmlReqPost.setRequestHeader("Content-Type","application/json")
+					xmlReqPost.onload=function() {
+						editor.enable()
+						if(window.location.hash==="#expert")
+							$('[disabled]').prop('disabled', false);
+					}
+					xmlReqPost.send(JSON.stringify(editor.getValue()))
+				}
+			}
 			xmlReqGet.onload = function () {
 				$("#config").html("")
 				editor = new JSONEditor($("#config").get(0), {
 					schema: {"$ref":"/config.schema.json"},
+					form_name_root: "config",
 					startval: JSON.parse(this.response)
-				})
-				editor.on('change',function() {
-					if(editor.validate().length!==0) {
-						console.debug("invalid configuration:",editor.validate())
-					} else {
-						console.debug(editor.getValue())
-						editor.disable()
-						xmlReqPost.open("POST", "/config.lua", true)
-						xmlReqPost.setRequestHeader("Content-Type","application/json")
-						xmlReqPost.onload=function() {editor.enable()}
-						xmlReqPost.send(JSON.stringify(editor.getValue()))
-					}
 				})
 			}
 			xmlReqGet.send()
